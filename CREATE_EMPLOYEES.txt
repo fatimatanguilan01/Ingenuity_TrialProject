@@ -1,0 +1,7 @@
+create or replace table employees
+(
+emp_id         number,
+employee_name  varchar2(100),
+salary         number,
+dept_id        number
+);

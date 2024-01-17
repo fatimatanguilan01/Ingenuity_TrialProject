@@ -1,0 +1,52 @@
+create or replace NONEDITIONABLE PROCEDURE add_employee(
+    p_empname      in varchar2,
+    p_sal          in number,
+    p_id           in number
+    )
+as
+    v_exist  number;
+    v_exist1 number;
+    v_empno  number;
+begin
+
+  begin
+    select 1
+    into v_exist
+    from department
+    where dept_id = p_id;
+  exception when no_data_found then
+    v_exist := 0;
+  end;
+  
+  begin
+    select seq_empno.nextval
+    into v_empno
+    from dual;
+  exception when no_data_found then
+    v_empno := 0;
+  end;
+  
+  begin
+    select 1
+    into v_exist1
+    from employees
+    where emp_id = v_empno;
+  exception when no_data_found then
+    v_exist1 := 0;
+  end;
+  
+
+
+  if v_exist = 0 then 
+      dbms_output.put_line('InvalidDepartment');
+  else
+      if v_exist1 = 0 then
+          insert into employees
+          values(v_empno, p_empname, p_sal ,p_id);
+      else
+           dbms_output.put_line('EmployeeExists');
+     end if;
+  end if;
+
+  commit;
+end;

@@ -1,0 +1,31 @@
+create or replace PROCEDURE high_salary(
+    p_threshold   in number
+  )
+as
+  cursor high_salary_cursor is 
+      select emp_id, 
+             employee_name,
+             salary
+      from employees
+      where salary > p_threshold;
+      
+  c_rec high_salary_cursor%ROWTYPE;
+begin
+
+  open high_salary_cursor;
+
+  loop 
+  fetch high_salary_cursor into c_rec;
+  exit when high_salary_cursor%NOTFOUND;
+  
+     dbms_output.put_line('Employee Id: '||c_rec.emp_id||
+                          ' Employee Name: '||c_rec.employee_name||
+                          ' Salary: '||c_rec.salary);
+                        
+  
+  exit when p_threshold > c_rec.salary;
+  end loop;
+   
+  close high_salary_cursor; 
+  
+end;

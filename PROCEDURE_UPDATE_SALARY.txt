@@ -1,0 +1,32 @@
+create or replace PROCEDURE update_salary(
+    p_emp_id       in number,
+    p_sal          in number
+  )
+as
+    v_exist    number;
+begin
+  
+  begin
+    select 1
+    into v_exist
+    from employees
+    where emp_id = p_emp_id;
+  exception when no_data_found then
+    v_exist := 0;
+  end;
+  
+  if v_exist = 1 then      
+  
+      update employees
+      set salary = p_sal
+      where emp_id = p_emp_id;
+      
+  else
+   
+     dbms_output.put_line('EmployeeNotFound');
+  
+  end if;
+   
+
+  commit;
+end;

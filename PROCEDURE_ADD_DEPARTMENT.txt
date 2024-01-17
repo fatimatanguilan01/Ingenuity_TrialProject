@@ -1,0 +1,29 @@
+create or replace NONEDITIONABLE PROCEDURE add_department(
+    p_id           in number,
+    p_department   in varchar2
+    )
+as
+  v_exist number;
+begin
+   begin
+       select 1
+       into v_exist
+       from department
+       where dept_id = p_id;
+    exception when no_data_found then 
+       v_exist := 0;
+    end;
+
+    if v_exist = 0 then
+
+      insert into department
+      values(p_id, p_department);
+      
+    else
+    
+      dbms_output.put_line('DepartmentExists');
+    
+    end if;
+
+  commit;
+end;
